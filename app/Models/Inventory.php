@@ -3,22 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Item extends Model
+class Inventory extends Model
 {
-    protected $primaryKey = 'sku';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'status',
+        'item_id',
+        'color_id',
+        'size_id',
+        'price',
     ];
 
-    public function inventories(): HasMany
+    public function item(): BelongsTo
     {
-        return $this->hasMany(Inventory::class, 'item_id');
+        return $this->belongsTo(Item::class, 'item_id');
+    }
+
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(Color::class, 'color_id');
+    }
+
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(Size::class, 'size_id');
     }
 }

@@ -4,30 +4,41 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Item;
 
 class ItemController extends Controller
 {
     public function index()
     {
-        // Fetch all items
-        $items = \App\Models\Item::with(['inventories.color', 'inventories.size'])->get();
-        return response()->json($items);
+        // Puedes usar paginación si quieres limitar resultados
+            $items = Item::with(['inventories.color', 'inventories.size'])->paginate(15);
+
+        return response()->json([
+            'data' => $items->items(),
+            'meta' => [
+                'total' => $items->total(),
+                'per_page' => $items->perPage(),
+                'current_page' => $items->currentPage(),
+                'last_page' => $items->lastPage(),
+            ]
+        ]);
     }
+
     public function show($sku)
     {
-        // Fetch a single item by SKU
-        $item = \App\Models\Item::with(['inventories.color', 'inventories.size'])
+        $item = Item::with(['inventories.color', 'inventories.size'])
             ->where('sku', $sku)
             ->firstOrFail();
+
         return response()->json($item);
     }
+
     public function inventory($sku)
     {
-        // Fetch variants of a single item by SKU
-        // This method returns the inventories associated with the item, including color and size
-        $item = \App\Models\Item::with(['inventories.color', 'inventories.size'])
+        $item = Item::with(['inventories.color', 'inventories.size'])
             ->where('sku', $sku)
             ->firstOrFail();
+
         return response()->json($item->inventories);
     }
 }
