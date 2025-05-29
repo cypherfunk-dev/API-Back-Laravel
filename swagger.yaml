@@ -1,0 +1,211 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'API Tejidos Artesanales'
+  description: |
+    API para sistema de gestión de productos y servicios de tejidos artesanales
+  termsOfService: 'https://api.tejidosartesanales.com/terms/'
+  contact:
+    email: 'soporte@tejidosartesanales.com'
+  license:
+    name: 'MIT'
+    url: 'https://opensource.org/licenses/MIT'
+host: 'api.tejidosartesanales.com'
+basePath: '/v1'
+schemes:
+  - 'https'
+consumes:
+  - 'application/json'
+produces:
+  - 'application/json'
+securityDefinitions:
+  api_key:
+    type: 'apiKey'
+    name: 'X-API-KEY'
+    in: 'header'
+    description: 'Clave API para autenticación'
+
+paths:
+  /items:
+    get:
+      tags: ['Productos']
+      summary: 'Listar todos los productos'
+      operationId: 'getAllItems'
+      parameters:
+        - name: 'page'
+          in: 'query'
+          description: 'Número de página'
+          type: 'integer'
+          default: 1
+        - name: 'limit'
+          in: 'query'
+          description: 'Límite de items por página'
+          type: 'integer'
+          default: 15
+      responses:
+        '200':
+          description: 'Lista de productos'
+          schema:
+            type: 'object'
+            properties:
+              data:
+                type: 'array'
+                items:
+                  $ref: '#/definitions/ItemWithVariants'
+              meta:
+                $ref: '#/definitions/Pagination'
+          headers:
+            X-RateLimit-Limit:
+              type: 'integer'
+              description: 'Límite de peticiones'
+            X-RateLimit-Remaining:
+              type: 'integer'
+              description: 'Peticiones restantes'
+            Cache-Control:
+              type: 'string'
+              default: 'public, max-age=300'
+        '500':
+          description: 'Error del servidor'
+          schema:
+            $ref: '#/definitions/Error'
+
+  '/items/{sku}':
+    get:
+      tags: ['Productos']
+      summary: 'Obtener producto específico'
+      operationId: 'getItemBySku'
+      parameters:
+        - name: 'sku'
+          in: 'path'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: 'Detalles del producto'
+          schema:
+            $ref: '#/definitions/ItemWithDetails'
+        '404':
+          description: 'Producto no encontrado'
+          schema:
+            $ref: '#/definitions/Error'
+
+  '/items/{sku}/inventory':
+    get:
+      tags: ['Inventario']
+      summary: 'Listar variantes de inventario'
+      operationId: 'getItemInventory'
+      parameters:
+        - name: 'sku'
+          in: 'path'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        '200':
+          description: 'Lista de variantes'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/InventoryWithDetails'
+
+definitions:
+  Item:
+    type: 'object'
+    required:
+      - 'sku'
+      - 'title'
+    properties:
+      sku:
+        type: 'integer'
+        format: 'int64'
+        example: 1
+      title:
+        type: 'string'
+        example: 'Falda a Crochet'
+      description:
+        type: 'string'
+      status:
+        type: 'string'
+        enum: ['active', 'inactive']
+        default: 'active'
+
+  ItemWithVariants:
+    allOf:
+      - $ref: '#/definitions/Item'
+      - type: 'object'
+        properties:
+          min_price:
+            type: 'number'
+            format: 'float'
+            example: 9990.00
+          available_colors:
+            type: 'array'
+            items:
+              type: 'string'
+            example: ['crema', 'verde']
+          available_sizes:
+            type: 'array'
+            items:
+              type: 'string'
+            example: ['S', 'M']
+
+  InventoryWithDetails:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      price:
+        type: 'number'
+        format: 'float'
+      size:
+        $ref: '#/definitions/Size'
+      color:
+        $ref: '#/definitions/Color'
+
+  Size:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      name:
+        type: 'string'
+        example: 'Small'
+      code:
+        type: 'string'
+        example: 'S'
+
+  Color:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      name:
+        type: 'string'
+        example: 'crema'
+      hex_code:
+        type: 'string'
+        example: '#FFFDD0'
+
+  Pagination:
+    type: 'object'
+    properties:
+      total:
+        type: 'integer'
+      per_page:
+        type: 'integer'
+      current_page:
+        type: 'integer'
+      last_page:
+        type: 'integer'
+
+  Error:
+    type: 'object'
+    properties:
+      code:
+        type: 'integer'
+      message:
+        type: 'string'
