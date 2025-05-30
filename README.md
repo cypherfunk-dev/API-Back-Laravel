@@ -1,1 +1,9 @@
-https://medium.com/@mark.tabletpc/set-up-laravel-with-swagger-for-comprehensive-api-documentation-step-by-step-instructions-d30552ca8051
+http://127.0.0.1:8000/api/documentation#/Items/getItemInventoryBySku
+
+generar documentacion swagger
+
+php artisan config:clear
+php artisan l5-swagger:generate
+
+crear clave 
+php artisan serve

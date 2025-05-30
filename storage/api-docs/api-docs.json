@@ -1,0 +1,116 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Inventario",
+        "description": "API para gestionar el inventario de items",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api/v1",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/api/v1/items": {
+            "get": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Lista todos los items en el inventario",
+                "operationId": "getItems",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página para paginación",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de items en el inventario"
+                    },
+                    "404": {
+                        "description": "No se encontraron items"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+        },
+        "/api/v1/items/{sku}": {
+            "get": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Obtiene un item por su SKU",
+                "operationId": "getItemBySku",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item a buscar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item encontrado"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+        },
+        "/api/v1/items/{sku}/inventory": {
+            "get": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Obtiene el inventario de un item por su SKU",
+                "operationId": "getItemInventoryBySku",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item a buscar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Inventario encontrado"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Items",
+            "description": "Operaciones relacionadas con los items del inventario"
+        }
+    ]
+}
