@@ -12,25 +12,13 @@
         }
     ],
     "paths": {
-        "/api/v1/items": {
+        "/items": {
             "get": {
                 "tags": [
                     "Items"
                 ],
                 "summary": "Lista todos los items en el inventario",
                 "operationId": "getItems",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Número de página para paginación",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 1
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Lista de items en el inventario"
@@ -44,7 +32,7 @@
                 }
             }
         },
-        "/api/v1/items/{sku}": {
+        "/items/{sku}": {
             "get": {
                 "tags": [
                     "Items"
@@ -75,7 +63,7 @@
                 }
             }
         },
-        "/api/v1/items/{sku}/inventory": {
+        "/items/{sku}/inventory": {
             "get": {
                 "tags": [
                     "Items"

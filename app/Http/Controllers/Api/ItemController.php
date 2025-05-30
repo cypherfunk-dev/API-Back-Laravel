@@ -13,20 +13,13 @@ class ItemController extends Controller
 {
     /**
  * @OA\Get(
- *     path="/api/v1/items",
+ *     path="/items",
  *     summary="Lista todos los items en el inventario",
  *     tags={"Items"},
  *     operationId="getItems",
  *     @OA\Response(response=200, description="Lista de items en el inventario"),
  *     @OA\Response(response=404, description="No se encontraron items"),
  *     @OA\Response(response=500, description="Error interno del servidor"),
- *     @OA\Parameter(
- *         name="page",
- *         in="query",
- *         description="Número de página para paginación",
- *         required=false,
- *         @OA\Schema(type="integer", default=1)
- *         )
  * )
  */
     public function index()
@@ -46,7 +39,7 @@ class ItemController extends Controller
     }
 /**
  * @OA\Get(
- *     path="/api/v1/items/{sku}",
+ *     path="/items/{sku}",
  *     summary="Obtiene un item por su SKU",
  *     tags={"Items"},
  *     operationId="getItemBySku",
@@ -73,7 +66,7 @@ class ItemController extends Controller
     }
     /**
      * @OA\Get(
-     *     path="/api/v1/items/{sku}/inventory",
+     *     path="/items/{sku}/inventory",
      *     summary="Obtiene el inventario de un item por su SKU",
      *     tags={"Items"},
      *     operationId="getItemInventoryBySku",
