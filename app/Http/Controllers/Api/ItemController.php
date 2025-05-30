@@ -58,11 +58,16 @@ class ItemController extends Controller
 
     public function show($sku)
     {
-        $item = Item::with(['inventories.color', 'inventories.size'])
-            ->where('sku', $sku)
-            ->firstOrFail();
-
-        return response()->json($item);
+        try {
+            // Busca el item por SKU y carga las relaciones de inventario, color y tamaño
+            $item = Item::with(['inventories.color', 'inventories.size'])
+                ->where('sku', $sku)
+                ->firstOrFail();
+            return response()->json($item);
+        } catch (\Exception $e) {
+            // Si no se encuentra el item, lanza una excepción
+            return response()->json(['error' => 'Item no encontrado'], 404);
+        }
     }
     /**
      * @OA\Get(
@@ -84,10 +89,16 @@ class ItemController extends Controller
      */
     public function inventory($sku)
     {
-        $item = Item::with(['inventories.color', 'inventories.size'])
-            ->where('sku', $sku)
-            ->firstOrFail();
-
-        return response()->json($item->inventories);
-    }
+        try {
+            // Busca el item por SKU y carga las relaciones de inventario, color y tamaño
+            $item = Item::with(['inventories.color', 'inventories.size'])
+                ->where('sku', $sku)
+                ->firstOrFail();
+                return response()->json($item->inventories);
+        } catch (\Exception $e) {
+            // Si no se encuentra el item, lanza una excepción
+            return response()->json(['error' => 'Item no encontrado'], 404);
+        }
+    
+}
 }

@@ -1,4 +1,4 @@
-http://127.0.0.1:8000/api/documentation#/Items/getItemInventoryBySku
+http://127.0.0.1:8000/api/documentation
 
 generar documentacion swagger
 
