@@ -12,6 +12,208 @@
         }
     ],
     "paths": {
+        "/items/{sku}/inventory": {
+            "get": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Obtiene el inventario de un item por su SKU",
+                "operationId": "getItemInventoryBySku",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item a buscar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Inventario encontrado"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Actualiza el inventario de un item por su SKU",
+                "operationId": "updateItemInventoryBySku",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "color_id": {
+                                        "description": "ID del color del inventario",
+                                        "type": "integer"
+                                    },
+                                    "size_id": {
+                                        "description": "ID del tamaño del inventario",
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "description": "Cantidad del inventario",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inventario actualizado"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Crea un nuevo inventario para un item",
+                "operationId": "createInventory",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "color_id",
+                                    "size_id",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "color_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "size_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "price": {
+                                        "type": "integer",
+                                        "example": 15000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Inventario creado"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al crear el inventario"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Elimina el inventario de un item por su SKU",
+                "operationId": "deleteItemInventoryBySku",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Inventario eliminado"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+        },
+        "/items/{sku}/inventory/stock": {
+            "get": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Obtiene el stock de un item por su SKU",
+                "operationId": "getItemStockBySku",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item a buscar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Stock encontrado"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+        },
         "/items": {
             "get": {
                 "tags": [
@@ -25,6 +227,34 @@
                     },
                     "404": {
                         "description": "No se encontraron items"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Crea un nuevo item",
+                "operationId": "createItem",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item creado exitosamente"
+                    },
+                    "400": {
+                        "description": "Solicitud inválida"
                     },
                     "500": {
                         "description": "Error interno del servidor"
@@ -61,29 +291,37 @@
                         "description": "Error interno del servidor"
                     }
                 }
-            }
-        },
-        "/items/{sku}/inventory": {
-            "get": {
+            },
+            "put": {
                 "tags": [
                     "Items"
                 ],
-                "summary": "Obtiene el inventario de un item por su SKU",
-                "operationId": "getItemInventoryBySku",
+                "summary": "Actualiza un item por su SKU",
+                "operationId": "updateItem",
                 "parameters": [
                     {
                         "name": "sku",
                         "in": "path",
-                        "description": "SKU del item a buscar",
+                        "description": "SKU del item a actualizar",
                         "required": true,
                         "schema": {
                             "type": "string"
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Inventario encontrado"
+                        "description": "Item actualizado exitosamente"
                     },
                     "404": {
                         "description": "Item no encontrado"
@@ -92,6 +330,70 @@
                         "description": "Error interno del servidor"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Elimina un item por su SKU",
+                "operationId": "deleteItem",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Item eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Item": {
+                "required": [
+                    "sku",
+                    "title",
+                    "status"
+                ],
+                "properties": {
+                    "sku": {
+                        "type": "string",
+                        "example": "SKU1234"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Zapato Deportivo"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Zapato para correr",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "inactive"
+                        ],
+                        "example": "active"
+                    }
+                },
+                "type": "object"
             }
         }
     },
