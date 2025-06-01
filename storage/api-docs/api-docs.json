@@ -201,34 +201,6 @@
                         "description": "Error interno del servidor"
                     }
                 }
-            },
-            "post": {
-                "tags": [
-                    "Items"
-                ],
-                "summary": "Crea un nuevo item",
-                "operationId": "createItem",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/Item"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Item creado exitosamente"
-                    },
-                    "400": {
-                        "description": "Solicitud inválida"
-                    },
-                    "500": {
-                        "description": "Error interno del servidor"
-                    }
-                }
             }
         },
         "/items/{sku}": {
@@ -323,6 +295,36 @@
                     },
                     "404": {
                         "description": "Item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+        },
+        "/items/": {
+            "post": {
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Crea un nuevo item",
+                "operationId": "createItem",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item creado exitosamente"
+                    },
+                    "400": {
+                        "description": "Solicitud inválida"
                     },
                     "500": {
                         "description": "Error interno del servidor"

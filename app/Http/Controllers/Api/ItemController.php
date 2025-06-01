@@ -36,7 +36,7 @@ class ItemController extends Controller
     {
         try {
             // Obtiene todos los items con sus relaciones de inventario, color y tamaño
-            $items = Item::with(['inventories.color', 'inventories.size'])
+            $items = Item::with(['inventories.color', 'inventories.size', 'inventories'])
                 ->orderBy('created_at', 'desc')
                 ->get();
             if ($items->count() > 0) {
@@ -82,7 +82,7 @@ class ItemController extends Controller
     }
     /**
      * @OA\Post(
-     *     path="/items",
+     *     path="/items/",
      *     summary="Crea un nuevo item",
      *     tags={"Items"},
      *     operationId="createItem",

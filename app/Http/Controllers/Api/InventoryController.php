@@ -12,7 +12,6 @@ use OpenApi\Annotations as OA;
 
 class InventoryController extends Controller
 {
-
     /**
      * @OA\Get(
      *     path="/items/{sku}/inventory",

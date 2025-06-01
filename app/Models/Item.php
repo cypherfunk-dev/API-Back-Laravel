@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Item extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'sku';
-
     protected $fillable = [
         'sku',
         'title',

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
     Schema::create('items', function (Blueprint $table) {
-        $table->id('sku')->uniqidue();
+        $table->id();
+        $table->string('sku')->unique();
         $table->string('title');
         $table->text('description')->nullable();
         $table->enum('status', ['active', 'inactive'])->default('active');

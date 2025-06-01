@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->float('price');
             $table->timestamps();
 
-            $table->foreign('item_id')->references('sku')->on('items')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->foreign('color_id')->references('id')->on('colors')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onDelete('cascade');
         });
@@ -24,3 +24,4 @@ return new class extends Migration {
         Schema::dropIfExists('inventories');
     }
 };
+ 
