@@ -10,6 +10,36 @@ use App\Models\Inventory;
 
 use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="Inventory",
+ *     required={"color_id", "size_id", "price"},
+ *     @OA\Property(property="id",        type="integer", example=1),
+ *     @OA\Property(property="color_id",  type="integer", example=1),
+ *     @OA\Property(property="size_id",   type="integer", example=2),
+ *     @OA\Property(property="price",     type="integer", example=15000),
+ *
+ *     @OA\Property(
+ *         property="color",
+ *         type="object",
+ *         @OA\Property(property="id",   type="integer", example=1),
+ *         @OA\Property(property="name", type="string",  example="Rojo")
+ *     ),
+ *
+ *     @OA\Property(
+ *         property="size",
+ *         type="object",
+ *         @OA\Property(property="id",   type="integer", example=2),
+ *         @OA\Property(property="name", type="string",  example="M")
+ *     )
+ * )
+ *
+ * @OA\Tag(
+ *     name="Inventories",
+ *     description="Operaciones relacionadas con productos en el stock"
+ * )
+ */
+
 
 class InventoryController extends Controller
 {

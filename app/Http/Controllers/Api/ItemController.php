@@ -19,7 +19,13 @@ use OpenApi\Annotations as OA;
  *     @OA\Property(property="description", type="string", nullable=true, example="Zapato para correr"),
  *     @OA\Property(property="status", type="string", enum={"active", "inactive"}, example="active")
  * )
+ * @OA\Property(
+ *     property="inventories",
+ *     type="array",
+ *     @OA\Items(ref="#/components/schemas/Inventory")
+ * )
  */
+
 
 class ItemController extends Controller
 {

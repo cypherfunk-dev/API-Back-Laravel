@@ -17,10 +17,10 @@ Route::prefix('v1')->group(function () {
     Route::middleware($customItemsThrottle)->put($itemSkuRoute, [ItemController::class, 'update']);
     Route::middleware($customItemsThrottle)->delete($itemSkuRoute, [ItemController::class, 'destroy']);
 
-    Route::middleware($customItemsThrottle)->get($itemInventoryRoute, [InventoryController::class,'index']);
-    Route::middleware($customItemsThrottle)->get($itemInventoryIdRoute, [InventoryController::class,'getInventoryBySkuAndId']);
+Route::middleware($customItemsThrottle)->get($itemInventoryRoute, [InventoryController::class,'index']);
+Route::middleware($customItemsThrottle)->post($itemInventoryRoute, [InventoryController::class,'storeInventory']);
+Route::middleware($customItemsThrottle)->get($itemInventoryIdRoute, [InventoryController::class,'getInventoryBySkuAndId']);
+Route::middleware($customItemsThrottle)->put($itemInventoryIdRoute,[InventoryController::class,'updateInventory']);
+Route::middleware($customItemsThrottle)->delete($itemInventoryIdRoute,[InventoryController::class,'destroyInventory']);
 
-    Route::middleware($customItemsThrottle)->get($itemInventoryRoute, [InventoryController::class, 'storeInventory']);
-    Route::middleware($customItemsThrottle)->put($itemInventoryIdRoute, [InventoryController::class, 'updateInventory']);
-    Route::middleware($customItemsThrottle)->delete($itemInventoryIdRoute, [InventoryController::class, 'destroyInventory']);
 });

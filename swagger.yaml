@@ -1,6 +1,3 @@
-Aquí tienes tu archivo Swagger corregido según los puntos detectados:
-
-```yaml
 swagger: '2.0'
 info:
   version: '1.0.0'
@@ -31,7 +28,7 @@ securityDefinitions:
 paths:
   /items:
     get:
-      tags: ['Productos']
+      tags: ['Items']
       summary: 'Listar todos los productos'
       operationId: 'getAllItems'
       parameters:
@@ -74,7 +71,7 @@ paths:
 
   '/items/{sku}':
     get:
-      tags: ['Productos']
+      tags: ['Items']
       summary: 'Obtener producto específico'
       operationId: 'getItemBySku'
       parameters:
@@ -94,7 +91,7 @@ paths:
 
   '/items/{sku}/inventory':
     get:
-      tags: ['Inventario']
+      tags: ['Inventory']
       summary: 'Listar variantes de inventario'
       operationId: 'getItemInventory'
       parameters:
@@ -219,6 +216,3 @@ definitions:
         type: 'integer'
       message:
         type: 'string'
-```
-
-Este archivo ahora debería cargar correctamente en Swagger UI o en [https://editor.swagger.io](https://editor.swagger.io). ¿Quieres que te lo pase en archivo descargable?

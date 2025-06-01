@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**sku** | **number** |  | [default to undefined]
+**sku** | **string** |  | [default to undefined]
 **title** | **string** |  | [default to undefined]
 **description** | **string** |  | [optional] [default to undefined]
 **status** | **string** |  | [optional] [default to StatusEnum_Active]

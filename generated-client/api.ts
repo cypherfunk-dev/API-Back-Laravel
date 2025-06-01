@@ -106,10 +106,10 @@ export interface InventoryWithDetails {
 export interface Item {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof Item
      */
-    'sku': number;
+    'sku': string;
     /**
      * 
      * @type {string}
@@ -140,15 +140,78 @@ export type ItemStatusEnum = typeof ItemStatusEnum[keyof typeof ItemStatusEnum];
 /**
  * 
  * @export
+ * @interface ItemWithDetails
+ */
+export interface ItemWithDetails {
+    /**
+     * 
+     * @type {string}
+     * @memberof ItemWithDetails
+     */
+    'sku': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ItemWithDetails
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ItemWithDetails
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ItemWithDetails
+     */
+    'status'?: ItemWithDetailsStatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ItemWithDetails
+     */
+    'min_price'?: number;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ItemWithDetails
+     */
+    'available_colors'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ItemWithDetails
+     */
+    'available_sizes'?: Array<string>;
+    /**
+     * 
+     * @type {Array<InventoryWithDetails>}
+     * @memberof ItemWithDetails
+     */
+    'inventories'?: Array<InventoryWithDetails>;
+}
+
+export const ItemWithDetailsStatusEnum = {
+    Active: 'active',
+    Inactive: 'inactive'
+} as const;
+
+export type ItemWithDetailsStatusEnum = typeof ItemWithDetailsStatusEnum[keyof typeof ItemWithDetailsStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface ItemWithVariants
  */
 export interface ItemWithVariants {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ItemWithVariants
      */
-    'sku': number;
+    'sku': string;
     /**
      * 
      * @type {string}
@@ -271,19 +334,19 @@ export interface Size {
 }
 
 /**
- * InventarioApi - axios parameter creator
+ * InventoryApi - axios parameter creator
  * @export
  */
-export const InventarioApiAxiosParamCreator = function (configuration?: Configuration) {
+export const InventoryApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
          * @summary Listar variantes de inventario
-         * @param {number} sku 
+         * @param {string} sku 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getItemInventory: async (sku: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getItemInventory: async (sku: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sku' is not null or undefined
             assertParamExists('getItemInventory', 'sku', sku)
             const localVarPath = `/items/{sku}/inventory`
@@ -314,75 +377,75 @@ export const InventarioApiAxiosParamCreator = function (configuration?: Configur
 };
 
 /**
- * InventarioApi - functional programming interface
+ * InventoryApi - functional programming interface
  * @export
  */
-export const InventarioApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = InventarioApiAxiosParamCreator(configuration)
+export const InventoryApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = InventoryApiAxiosParamCreator(configuration)
     return {
         /**
          * 
          * @summary Listar variantes de inventario
-         * @param {number} sku 
+         * @param {string} sku 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getItemInventory(sku: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InventoryWithDetails>>> {
+        async getItemInventory(sku: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InventoryWithDetails>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getItemInventory(sku, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['InventarioApi.getItemInventory']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['InventoryApi.getItemInventory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * InventarioApi - factory interface
+ * InventoryApi - factory interface
  * @export
  */
-export const InventarioApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = InventarioApiFp(configuration)
+export const InventoryApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = InventoryApiFp(configuration)
     return {
         /**
          * 
          * @summary Listar variantes de inventario
-         * @param {number} sku 
+         * @param {string} sku 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getItemInventory(sku: number, options?: RawAxiosRequestConfig): AxiosPromise<Array<InventoryWithDetails>> {
+        getItemInventory(sku: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<InventoryWithDetails>> {
             return localVarFp.getItemInventory(sku, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * InventarioApi - object-oriented interface
+ * InventoryApi - object-oriented interface
  * @export
- * @class InventarioApi
+ * @class InventoryApi
  * @extends {BaseAPI}
  */
-export class InventarioApi extends BaseAPI {
+export class InventoryApi extends BaseAPI {
     /**
      * 
      * @summary Listar variantes de inventario
-     * @param {number} sku 
+     * @param {string} sku 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof InventarioApi
+     * @memberof InventoryApi
      */
-    public getItemInventory(sku: number, options?: RawAxiosRequestConfig) {
-        return InventarioApiFp(this.configuration).getItemInventory(sku, options).then((request) => request(this.axios, this.basePath));
+    public getItemInventory(sku: string, options?: RawAxiosRequestConfig) {
+        return InventoryApiFp(this.configuration).getItemInventory(sku, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 
 /**
- * ProductosApi - axios parameter creator
+ * ItemsApi - axios parameter creator
  * @export
  */
-export const ProductosApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ItemsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -427,11 +490,11 @@ export const ProductosApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Obtener producto específico
-         * @param {number} sku 
+         * @param {string} sku 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getItemBySku: async (sku: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getItemBySku: async (sku: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'sku' is not null or undefined
             assertParamExists('getItemBySku', 'sku', sku)
             const localVarPath = `/items/{sku}`
@@ -462,11 +525,11 @@ export const ProductosApiAxiosParamCreator = function (configuration?: Configura
 };
 
 /**
- * ProductosApi - functional programming interface
+ * ItemsApi - functional programming interface
  * @export
  */
-export const ProductosApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = ProductosApiAxiosParamCreator(configuration)
+export const ItemsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ItemsApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -479,31 +542,31 @@ export const ProductosApiFp = function(configuration?: Configuration) {
         async getAllItems(page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAllItems200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllItems(page, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductosApi.getAllItems']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ItemsApi.getAllItems']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary Obtener producto específico
-         * @param {number} sku 
+         * @param {string} sku 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getItemBySku(sku: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ItemWithDetails>> {
+        async getItemBySku(sku: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ItemWithDetails>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getItemBySku(sku, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductosApi.getItemBySku']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ItemsApi.getItemBySku']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * ProductosApi - factory interface
+ * ItemsApi - factory interface
  * @export
  */
-export const ProductosApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = ProductosApiFp(configuration)
+export const ItemsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ItemsApiFp(configuration)
     return {
         /**
          * 
@@ -519,23 +582,23 @@ export const ProductosApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Obtener producto específico
-         * @param {number} sku 
+         * @param {string} sku 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getItemBySku(sku: number, options?: RawAxiosRequestConfig): AxiosPromise<ItemWithDetails> {
+        getItemBySku(sku: string, options?: RawAxiosRequestConfig): AxiosPromise<ItemWithDetails> {
             return localVarFp.getItemBySku(sku, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * ProductosApi - object-oriented interface
+ * ItemsApi - object-oriented interface
  * @export
- * @class ProductosApi
+ * @class ItemsApi
  * @extends {BaseAPI}
  */
-export class ProductosApi extends BaseAPI {
+export class ItemsApi extends BaseAPI {
     /**
      * 
      * @summary Listar todos los productos
@@ -543,22 +606,22 @@ export class ProductosApi extends BaseAPI {
      * @param {number} [limit] Límite de items por página
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductosApi
+     * @memberof ItemsApi
      */
     public getAllItems(page?: number, limit?: number, options?: RawAxiosRequestConfig) {
-        return ProductosApiFp(this.configuration).getAllItems(page, limit, options).then((request) => request(this.axios, this.basePath));
+        return ItemsApiFp(this.configuration).getAllItems(page, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Obtener producto específico
-     * @param {number} sku 
+     * @param {string} sku 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductosApi
+     * @memberof ItemsApi
      */
-    public getItemBySku(sku: number, options?: RawAxiosRequestConfig) {
-        return ProductosApiFp(this.configuration).getItemBySku(sku, options).then((request) => request(this.axios, this.basePath));
+    public getItemBySku(sku: string, options?: RawAxiosRequestConfig) {
+        return ItemsApiFp(this.configuration).getItemBySku(sku, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

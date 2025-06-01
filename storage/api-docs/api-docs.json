@@ -404,6 +404,58 @@
     },
     "components": {
         "schemas": {
+            "Inventory": {
+                "required": [
+                    "color_id",
+                    "size_id",
+                    "price"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "color_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "size_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "price": {
+                        "type": "integer",
+                        "example": 15000
+                    },
+                    "color": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Rojo"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "size": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "M"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "Item": {
                 "required": [
                     "sku",
@@ -431,6 +483,12 @@
                             "inactive"
                         ],
                         "example": "active"
+                    },
+                    "inventories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Inventory"
+                        }
                     }
                 },
                 "type": "object"
@@ -439,12 +497,12 @@
     },
     "tags": [
         {
-            "name": "Items",
-            "description": "Operaciones relacionadas con los items del inventario"
+            "name": "Inventories",
+            "description": "Operaciones relacionadas con productos en el stock"
         },
         {
-            "name": "Inventories",
-            "description": "Inventories"
+            "name": "Items",
+            "description": "Operaciones relacionadas con los items del inventario"
         }
     ]
 }

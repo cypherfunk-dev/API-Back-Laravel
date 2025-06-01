@@ -1,6 +1,6 @@
-# InventarioApi
+# InventoryApi
 
-All URIs are relative to *https://api.tejidosartesanales.com/v1*
+All URIs are relative to *http://localhost:8000/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
@@ -14,14 +14,14 @@ All URIs are relative to *https://api.tejidosartesanales.com/v1*
 
 ```typescript
 import {
-    InventarioApi,
+    InventoryApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new InventarioApi(configuration);
+const apiInstance = new InventoryApi(configuration);
 
-let sku: number; // (default to undefined)
+let sku: string; // (default to undefined)
 
 const { status, data } = await apiInstance.getItemInventory(
     sku
@@ -32,7 +32,7 @@ const { status, data } = await apiInstance.getItemInventory(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **sku** | [**number**] |  | defaults to undefined|
+| **sku** | [**string**] |  | defaults to undefined|
 
 
 ### Return type

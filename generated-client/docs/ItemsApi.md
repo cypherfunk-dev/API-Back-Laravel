@@ -1,6 +1,6 @@
-# ProductosApi
+# ItemsApi
 
-All URIs are relative to *https://api.tejidosartesanales.com/v1*
+All URIs are relative to *http://localhost:8000/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
@@ -15,12 +15,12 @@ All URIs are relative to *https://api.tejidosartesanales.com/v1*
 
 ```typescript
 import {
-    ProductosApi,
+    ItemsApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ProductosApi(configuration);
+const apiInstance = new ItemsApi(configuration);
 
 let page: number; //Número de página (optional) (default to 1)
 let limit: number; //Límite de items por página (optional) (default to 15)
@@ -69,14 +69,14 @@ No authorization required
 
 ```typescript
 import {
-    ProductosApi,
+    ItemsApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ProductosApi(configuration);
+const apiInstance = new ItemsApi(configuration);
 
-let sku: number; // (default to undefined)
+let sku: string; // (default to undefined)
 
 const { status, data } = await apiInstance.getItemBySku(
     sku
@@ -87,7 +87,7 @@ const { status, data } = await apiInstance.getItemBySku(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **sku** | [**number**] |  | defaults to undefined|
+| **sku** | [**string**] |  | defaults to undefined|
 
 
 ### Return type

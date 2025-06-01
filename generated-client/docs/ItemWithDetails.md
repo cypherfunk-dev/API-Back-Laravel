@@ -1,4 +1,4 @@
-# ItemWithVariants
+# ItemWithDetails
 
 
 ## Properties
@@ -12,13 +12,14 @@ Name | Type | Description | Notes
 **min_price** | **number** |  | [optional] [default to undefined]
 **available_colors** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **available_sizes** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**inventories** | [**Array&lt;InventoryWithDetails&gt;**](InventoryWithDetails.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { ItemWithVariants } from './api';
+import { ItemWithDetails } from './api';
 
-const instance: ItemWithVariants = {
+const instance: ItemWithDetails = {
     sku,
     title,
     description,
@@ -26,6 +27,7 @@ const instance: ItemWithVariants = {
     min_price,
     available_colors,
     available_sizes,
+    inventories,
 };
 ```
 

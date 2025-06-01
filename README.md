@@ -64,9 +64,6 @@ Accede a `http://127.0.0.1:8000/api/documentation`
 
 ```bash
 php artisan serve        # http://127.0.0.1:8000
-# Con Docker
-docker compose up -d web
-```
 
 ---
 
@@ -84,10 +81,11 @@ php artisan queue:work
 
 ---
 
-## 7️⃣ Tests
+## 7️⃣ Tests en el cliente
 
+Ingresa a la carpeta generated-cliente y ejecuta
 ```bash
-php artisan test
+npx jest
 ```
 
 ---
