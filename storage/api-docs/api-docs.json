@@ -183,37 +183,6 @@
                 }
             }
         },
-        "/items/{sku}/inventory/stock": {
-            "get": {
-                "tags": [
-                    "Items"
-                ],
-                "summary": "Obtiene el stock de un item por su SKU",
-                "operationId": "getItemStockBySku",
-                "parameters": [
-                    {
-                        "name": "sku",
-                        "in": "path",
-                        "description": "SKU del item a buscar",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Stock encontrado"
-                    },
-                    "404": {
-                        "description": "Item no encontrado"
-                    },
-                    "500": {
-                        "description": "Error interno del servidor"
-                    }
-                }
-            }
-        },
         "/items": {
             "get": {
                 "tags": [

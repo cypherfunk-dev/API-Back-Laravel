@@ -12,6 +12,7 @@ use OpenApi\Annotations as OA;
 
 class InventoryController extends Controller
 {
+
     /**
      * @OA\Get(
      *     path="/items/{sku}/inventory",
@@ -30,70 +31,88 @@ class InventoryController extends Controller
      *     @OA\Response(response=500, description="Error interno del servidor")
      * )
      */
-    public function inventory($sku)
+    public function showinventory($sku)
     {
+        /*
+        * @OA\Get(
+        *     path="/items/{sku}/inventory",
+        *     summary="Obtiene el inventario de un item por su SKU",
+        *     tags={"Items"},
+        *     operationId="getItemInventoryBySku",
+        *     @OA\Parameter(
+        *         name="sku",
+        *         in="path",
+        *         required=true,
+        *         @OA\Schema(type="string"),
+        *         description="SKU del item a buscar"
+        *     ),
+        *     @OA\Response(response=200, description="Inventario encontrado"),
+        *     @OA\Response(response=404, description="Item no encontrado"),
+        *     @OA\Response(response=500, description="Error interno del servidor")
+        * )
+        */
+        // Busca el item por SKU y carga las relaciones de inventario, color y tamaño
         try {
-            // Busca el item por SKU y carga las relaciones de inventario, color y tamaño
             $item = Item::with(['inventories.color', 'inventories.size'])
                 ->where('sku', $sku)
                 ->firstOrFail();
             return response()->json($item->inventories);
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             // Si no se encuentra el item, lanza una excepción
             return response()->json(['error' => 'Item no encontrado'], 404);
         }
 
     }
-/**
- * @OA\Post(
- *     path="/items/{sku}/inventory",
- *     summary="Crea un nuevo inventario para un item",
- *     tags={"Items"},
- *     operationId="createInventory",
- *     @OA\Parameter(
- *         name="sku",
- *         in="path",
- *         required=true,
- *         @OA\Schema(type="string"),
- *         description="SKU del item"
- *     ),
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"color_id", "size_id", "price"},
- *             @OA\Property(property="color_id", type="integer", example=1),
- *             @OA\Property(property="size_id", type="integer", example=2),
- *             @OA\Property(property="price", type="integer", example=15000)
- *         )
- *     ),
- *     @OA\Response(response=201, description="Inventario creado"),
- *     @OA\Response(response=404, description="Item no encontrado"),
- *     @OA\Response(response=500, description="Error al crear el inventario")
- * )
- */
-public function store(Request $request, $sku)
-{
-    $request->validate([
-        'color_id' => 'required|integer|exists:colors,id',
-        'size_id' => 'required|integer|exists:sizes,id',
-        'price' => 'required|integer|min:0',
-    ]);
-
-    try {
-        $item = Item::where('sku', $sku)->firstOrFail();
-
-        $inventory = $item->inventories()->create([
-            'color_id' => $request->color_id,
-            'size_id' => $request->size_id,
-            'price' => $request->price, // Corregido: antes decía 'quantity'
+    /**
+     * @OA\Post(
+     *     path="/items/{sku}/inventory",
+     *     summary="Crea un nuevo inventario para un item",
+     *     tags={"Items"},
+     *     operationId="createInventory",
+     *     @OA\Parameter(
+     *         name="sku",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         description="SKU del item"
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"color_id", "size_id", "price"},
+     *             @OA\Property(property="color_id", type="integer", example=1),
+     *             @OA\Property(property="size_id", type="integer", example=2),
+     *             @OA\Property(property="price", type="integer", example=15000)
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Inventario creado"),
+     *     @OA\Response(response=404, description="Item no encontrado"),
+     *     @OA\Response(response=500, description="Error al crear el inventario")
+     * )
+     */
+    public function storeInventory(Request $request, $sku)
+    {
+        $request->validate([
+            'color_id' => 'required|integer|exists:colors,id',
+            'size_id' => 'required|integer|exists:sizes,id',
+            'price' => 'required|integer|min:0',
         ]);
 
-        return response()->json($inventory, 201);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Error al crear el inventario'], 500);
-    }
-}
+        try {
+            $item = Item::where('sku', $sku)->firstOrFail();
 
+            $inventory = $item->inventories()->create([
+                'color_id' => $request->color_id,
+                'size_id' => $request->size_id,
+                'price' => $request->price, // Corregido: antes decía 'quantity'
+            ]);
+
+            return response()->json($inventory, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al crear el inventario'], 500);
+        }
+    }
     /**
      * @OA\Put(
      *     path="/items/{sku}/inventory",
@@ -162,7 +181,7 @@ public function store(Request $request, $sku)
      *     @OA\Response(response=500, description="Error interno del servidor")
      * )
      */
-    public function deleteInventory($sku)
+    public function destroyInventory($sku)
     {
         try {
             // Busca el item por SKU
@@ -176,57 +195,4 @@ public function store(Request $request, $sku)
             return response()->json(['error' => 'Error al eliminar el inventario'], 500);
         }
     }
-    /**
-     * @OA\Get(
-     *     path="/items/{sku}/inventory/stock",
-     *     summary="Obtiene el stock de un item por su SKU",
-     *     tags={"Items"},
-     *     operationId="getItemStockBySku",
-     *     @OA\Parameter(
-     *         name="sku",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="string"),
-     *         description="SKU del item a buscar"
-     *     ),
-     *     @OA\Response(response=200, description="Stock encontrado"),
-     *     @OA\Response(response=404, description="Item no encontrado"),
-     *     @OA\Response(response=500, description="Error interno del servidor")
-     * )
-     */
-    public function stock($sku)
-    {
-        try {
-            // Busca el item por SKU y carga las relaciones de inventario, color y tamaño
-            $item = Item::with(['inventories.color', 'inventories.size'])
-                ->where('sku', $sku)
-                ->firstOrFail();
-
-            // Calcula el stock total sumando las cantidades de todos los inventarios
-            $totalStock = $item->inventories->sum('quantity');
-
-            return response()->json(['stock' => $totalStock]);
-        } catch (\Exception $e) {
-            // Si no se encuentra el item, lanza una excepción
-            return response()->json(['error' => 'Item no encontrado'], 404);
-        }
-    }
-    /**
-     * @OA\Get(
-     *     path="/items/{sku}/inventory/available",
-     *     summary="Obtiene el stock disponible de un item por su SKU",
-     *     tags={"Items"},
-     *     operationId="getItemAvailableStockBySku",
-     *     @OA\Parameter(
-     *         name="sku",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="string"),
-     *         description="SKU del item a buscar"
-     *     ),
-     *     @OA\Response(response=200, description="Stock disponible encontrado"),
-     *     @OA\Response(response=404, description="Item no encontrado"),
-     *     @OA\Response(response=500, description="Error interno del servidor")
-     * )
-     */
 }

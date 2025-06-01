@@ -36,9 +36,12 @@ class ItemController extends Controller
     {
         try {
             // Obtiene todos los items con sus relaciones de inventario, color y tamaño
-            $items = Item::with(['inventories.color', 'inventories.size'])->get();
-            if ($items->isEmpty()) {
-                return response()->json(['message' => 'No se encontraron items'], 404);
+            $items = Item::with(['inventories.color', 'inventories.size'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+            if ($items->count() > 0) {
+                // Si se encuentran items, devuelve la lista
+                return response()->json($items);
             }
         } catch (\Exception $e) {
             // Manejo de errores
@@ -64,7 +67,6 @@ class ItemController extends Controller
      *     @OA\Response(response=500, description="Error interno del servidor")
      * )
      */
-
     public function show($sku)
     {
         try {

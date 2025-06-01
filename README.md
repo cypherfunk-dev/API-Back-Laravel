@@ -7,3 +7,9 @@ php artisan l5-swagger:generate
 
 crear clave 
 php artisan serve
+
+recrear la base y poblarla con seeders
+php artisan migrate:fresh --seed
+
+recrearla limpia
+php artisan migrate:fresh
