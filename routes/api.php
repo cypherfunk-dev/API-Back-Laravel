@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\InventoryController;
 Route::prefix('v1')->group(function () {
     $itemSkuRoute = '/items/{sku}';
     $itemInventoryRoute = '/items/{sku}/inventory';
+    $itemInventoryIdRoute = '/items/{sku}/inventory/{inventory_id}';
 
 
     Route::get('/items', [ItemController::class, 'index']);
@@ -15,8 +16,10 @@ Route::prefix('v1')->group(function () {
     Route::put($itemSkuRoute, [ItemController::class, 'update']);
     Route::delete($itemSkuRoute, [ItemController::class, 'destroy']);
 
-    Route::get($itemInventoryRoute, [InventoryController::class, 'showInventory']);
+    Route::get($itemInventoryRoute, [InventoryController::class,'index']);
+    Route::get($itemInventoryIdRoute, [InventoryController::class,'getInventoryBySkuAndId']);
+
     Route::post($itemInventoryRoute, [InventoryController::class, 'storeInventory']);
-    Route::put($itemInventoryRoute, [InventoryController::class, 'updateInventory']);
-    Route::delete($itemInventoryRoute, [InventoryController::class, 'destroyInventory']);
+    Route::put($itemInventoryIdRoute, [InventoryController::class, 'updateInventory']);
+    Route::delete($itemInventoryIdRoute, [InventoryController::class, 'destroyInventory']);
 });

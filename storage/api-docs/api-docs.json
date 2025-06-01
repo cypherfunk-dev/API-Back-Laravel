@@ -15,10 +15,11 @@
         "/items/{sku}/inventory": {
             "get": {
                 "tags": [
-                    "Items"
+                    "Inventories"
                 ],
-                "summary": "Obtiene el inventario de un item por su SKU",
-                "operationId": "getItemInventoryBySku",
+                "summary": "Lista el inventario de un item por su SKU",
+                "description": "Obtiene el inventario de un item especificado por su SKU. Incluye detalles de color, tamaño y precio.",
+                "operationId": "getItemInventory",
                 "parameters": [
                     {
                         "name": "sku",
@@ -42,64 +43,12 @@
                     }
                 }
             },
-            "put": {
-                "tags": [
-                    "Items"
-                ],
-                "summary": "Actualiza el inventario de un item por su SKU",
-                "operationId": "updateItemInventoryBySku",
-                "parameters": [
-                    {
-                        "name": "sku",
-                        "in": "path",
-                        "description": "SKU del item a actualizar",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "color_id": {
-                                        "description": "ID del color del inventario",
-                                        "type": "integer"
-                                    },
-                                    "size_id": {
-                                        "description": "ID del tamaño del inventario",
-                                        "type": "integer"
-                                    },
-                                    "quantity": {
-                                        "description": "Cantidad del inventario",
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Inventario actualizado"
-                    },
-                    "404": {
-                        "description": "Item no encontrado"
-                    },
-                    "500": {
-                        "description": "Error interno del servidor"
-                    }
-                }
-            },
             "post": {
                 "tags": [
-                    "Items"
+                    "Inventories"
                 ],
                 "summary": "Crea un nuevo inventario para un item",
+                "description": "Crea un nuevo inventario para un item especificado por su SKU. Requiere color_id, size_id y price.",
                 "operationId": "createInventory",
                 "parameters": [
                     {
@@ -152,12 +101,120 @@
                         "description": "Error al crear el inventario"
                     }
                 }
+            }
+        },
+        "/items/{sku}/inventory/{inventory_id}": {
+            "get": {
+                "tags": [
+                    "Inventories"
+                ],
+                "summary": "Obtiene un inventario por ID y SKU del item",
+                "operationId": "getInventoryBySkuAndId",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "inventory_id",
+                        "in": "path",
+                        "description": "ID del inventario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Inventario encontrado"
+                    },
+                    "404": {
+                        "description": "Inventario o item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Inventories"
+                ],
+                "summary": "Actualiza un inventario por ID y SKU del item",
+                "operationId": "updateInventory",
+                "parameters": [
+                    {
+                        "name": "sku",
+                        "in": "path",
+                        "description": "SKU del item",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "inventory_id",
+                        "in": "path",
+                        "description": "ID del inventario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "color_id",
+                                    "size_id",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "color_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "size_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "example": 15000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inventario actualizado"
+                    },
+                    "404": {
+                        "description": "Inventario o item no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
             },
             "delete": {
                 "tags": [
-                    "Items"
+                    "Inventories"
                 ],
-                "summary": "Elimina el inventario de un item por su SKU",
+                "summary": "Elimina el inventario de un item por su SKU y su id de inventario",
+                "description": "Elimina el inventario de un item especificado por su SKU e identificador de tabla. Elimina todas las entradas de inventario asociadas a ese SKU.",
                 "operationId": "deleteItemInventoryBySku",
                 "parameters": [
                     {
@@ -167,6 +224,15 @@
                         "required": true,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "inventory_id",
+                        "in": "path",
+                        "description": "ID del inventario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
                         }
                     }
                 ],
@@ -372,6 +438,10 @@
         {
             "name": "Items",
             "description": "Operaciones relacionadas con los items del inventario"
+        },
+        {
+            "name": "Inventories",
+            "description": "Inventories"
         }
     ]
 }

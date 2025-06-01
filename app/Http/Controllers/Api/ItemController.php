@@ -97,7 +97,7 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'sku' => 'required|string|max:255|unique:items,sku',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -105,10 +105,10 @@ class ItemController extends Controller
         ]);
 
         try {
-            $item = Item::create($request->all());
+            $item = Item::create($validated);
             return response()->json($item, 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al crear el item'], 500);
+            return response()->json(['erro r' => 'Error al crear el item'], 500);
         }
     }
     /**
@@ -164,7 +164,9 @@ class ItemController extends Controller
      *     ),
      *     @OA\Response(response=204, description="Item eliminado exitosamente"),
      *     @OA\Response(response=404, description="Item no encontrado"),
-     *     @OA\Response(response=500, description="Error interno del servidor")
+     *     @OA\Response(response=500, description="Error interno del servidor"),
+     *     @OA\Response(response=204, description="Registro eliminado exitosamente"),
+
      * )
      */
     public function destroy($sku)
