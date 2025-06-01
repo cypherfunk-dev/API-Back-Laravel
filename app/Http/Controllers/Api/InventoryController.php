@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Item;
@@ -34,11 +35,35 @@ class InventoryController extends Controller
     public function index($sku)
     {
         try {
-            $item = Item::where('sku', $sku)
-                ->with(['inventories.color', 'inventories.size'])
-                ->firstOrFail();
+            $cacheKey = "item_with_inventory_{$sku}";
 
-            return response()->json($item);
+            $data = Cache::remember($cacheKey, 60, function () use ($sku) {
+                $item = Item::where('sku', $sku)
+                    ->with(['inventories.color', 'inventories.size'])
+                    ->firstOrFail();
+
+                $inventories = $item->inventories->map(function ($inventory) {
+                    return [
+                        'id' => $inventory->id,
+                        'stock' => $inventory->stock,
+                        'color' => [
+                            'id' => $inventory->color->id,
+                            'name' => $inventory->color->name,
+                        ],
+                        'size' => [
+                            'id' => $inventory->size->id,
+                            'name' => $inventory->size->name,
+                        ],
+                    ];
+                });
+
+                return [
+                    'item' => $item,
+                    'inventories' => $inventories,
+                ];
+            });
+
+            return response()->json($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => 'Item no encontrado'], 404);
         } catch (\Exception $e) {
@@ -74,13 +99,16 @@ class InventoryController extends Controller
     public function getInventoryBySkuAndId($sku, $inventory_id)
     {
         try {
-            // Buscar el inventario que pertenece al item con ese SKU
-            $inventory = Inventory::where('id', $inventory_id)
-                ->whereHas('item', function ($query) use ($sku) {
-                    $query->where('sku', $sku);
-                })
-                ->with(['color', 'size'])
-                ->firstOrFail();
+            $cacheKey = "inventory_{$sku}_{$inventory_id}";
+
+            $inventory = Cache::remember($cacheKey, 60, function () use ($sku, $inventory_id) {
+                return Inventory::where('id', $inventory_id)
+                    ->whereHas('item', function ($query) use ($sku) {
+                        $query->where('sku', $sku);
+                    })
+                    ->with(['color', 'size'])
+                    ->firstOrFail();
+            });
 
             return response()->json($inventory, 200);
         } catch (\Exception $e) {
@@ -223,7 +251,7 @@ class InventoryController extends Controller
      *     ),
      *     @OA\Response(response=200, description="Inventario eliminado"),
      *     @OA\Response(response=404, description="Item no encontrado"),
-     *     @OA\Response(response=500, description="Error interno del servidor")
+     *     @OA\Response(response=500, description="Error interno del servidor"),
      *     @OA\Response(response=204, description="Registro eliminado exitosamente"),
      * )
      */

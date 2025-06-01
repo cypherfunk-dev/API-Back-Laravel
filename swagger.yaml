@@ -1,3 +1,6 @@
+Aquí tienes tu archivo Swagger corregido según los puntos detectados:
+
+```yaml
 swagger: '2.0'
 info:
   version: '1.0.0'
@@ -10,10 +13,10 @@ info:
   license:
     name: 'MIT'
     url: 'https://opensource.org/licenses/MIT'
-host: 'api.tejidosartesanales.com'
+host: 'localhost:8000'
 basePath: '/v1'
 schemes:
-  - 'https'
+  - 'http'
 consumes:
   - 'application/json'
 produces:
@@ -78,8 +81,7 @@ paths:
         - name: 'sku'
           in: 'path'
           required: true
-          type: 'integer'
-          format: 'int64'
+          type: 'string'
       responses:
         '200':
           description: 'Detalles del producto'
@@ -99,8 +101,7 @@ paths:
         - name: 'sku'
           in: 'path'
           required: true
-          type: 'integer'
-          format: 'int64'
+          type: 'string'
       responses:
         '200':
           description: 'Lista de variantes'
@@ -117,9 +118,8 @@ definitions:
       - 'title'
     properties:
       sku:
-        type: 'integer'
-        format: 'int64'
-        example: 1
+        type: 'string'
+        example: 'SKU-001'
       title:
         type: 'string'
         example: 'Falda a Crochet'
@@ -149,6 +149,16 @@ definitions:
             items:
               type: 'string'
             example: ['S', 'M']
+
+  ItemWithDetails:
+    allOf:
+      - $ref: '#/definitions/ItemWithVariants'
+      - type: 'object'
+        properties:
+          inventories:
+            type: 'array'
+            items:
+              $ref: '#/definitions/InventoryWithDetails'
 
   InventoryWithDetails:
     type: 'object'
@@ -209,3 +219,6 @@ definitions:
         type: 'integer'
       message:
         type: 'string'
+```
+
+Este archivo ahora debería cargar correctamente en Swagger UI o en [https://editor.swagger.io](https://editor.swagger.io). ¿Quieres que te lo pase en archivo descargable?

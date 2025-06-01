@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Cache;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Item;
@@ -35,19 +37,22 @@ class ItemController extends Controller
     public function index()
     {
         try {
-            // Obtiene todos los items con sus relaciones de inventario, color y tamaño
-            $items = Item::with(['inventories.color', 'inventories.size', 'inventories'])
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $cacheKey = 'all_items_with_inventory';
+
+            $items = Cache::remember($cacheKey, 60, function () {
+                return Item::with(['inventories.color', 'inventories.size', 'inventories'])
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            });
+
             if ($items->count() > 0) {
-                // Si se encuentran items, devuelve la lista
                 return response()->json($items);
             }
+
+            return response()->json(['message' => 'No se encontraron items'], 404);
         } catch (\Exception $e) {
-            // Manejo de errores
             return response()->json(['error' => 'Error al obtener los items'], 500);
         }
-
     }
     /**
      * @OA\Get(
@@ -70,13 +75,16 @@ class ItemController extends Controller
     public function show($sku)
     {
         try {
-            // Busca el item por SKU y carga las relaciones de inventario, color y tamaño
-            $item = Item::with(['inventories.color', 'inventories.size'])
-                ->where('sku', $sku)
-                ->firstOrFail();
+            $cacheKey = "item_show_{$sku}";
+
+            $item = Cache::remember($cacheKey, 60, function () use ($sku) {
+                return Item::with(['inventories.color', 'inventories.size'])
+                    ->where('sku', $sku)
+                    ->firstOrFail();
+            });
+
             return response()->json($item);
         } catch (\Exception $e) {
-            // Si no se encuentra el item, lanza una excepción
             return response()->json(['error' => 'Item no encontrado'], 404);
         }
     }
@@ -162,7 +170,6 @@ class ItemController extends Controller
      *         @OA\Schema(type="string"),
      *         description="SKU del item a eliminar"
      *     ),
-     *     @OA\Response(response=204, description="Item eliminado exitosamente"),
      *     @OA\Response(response=404, description="Item no encontrado"),
      *     @OA\Response(response=500, description="Error interno del servidor"),
      *     @OA\Response(response=204, description="Registro eliminado exitosamente"),
