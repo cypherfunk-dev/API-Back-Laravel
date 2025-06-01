@@ -245,6 +245,9 @@
                     },
                     "500": {
                         "description": "Error interno del servidor"
+                    },
+                    "204": {
+                        "description": "Registro eliminado exitosamente"
                     }
                 }
             }
@@ -356,14 +359,14 @@
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "Item eliminado exitosamente"
-                    },
                     "404": {
                         "description": "Item no encontrado"
                     },
                     "500": {
                         "description": "Error interno del servidor"
+                    },
+                    "204": {
+                        "description": "Registro eliminado exitosamente"
                     }
                 }
             }
