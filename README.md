@@ -26,8 +26,6 @@ cd tejidos-api
 # Dependencias PHP
 composer install
 
-# (Opcional) compilar assets Front-End
-npm install && npm run build
 
 # Variables de entorno
 cp .env.example .env
@@ -39,7 +37,7 @@ php artisan key:generate
 
 ---
 
-## 3️⃣ Base de datos
+## 3️⃣ Base de datos (en caso que se requiera reagregar)
 
 ```bash
 php artisan migrate --seed
@@ -67,21 +65,10 @@ php artisan serve        # http://127.0.0.1:8000
 
 ---
 
-## 6️⃣ Colas y caché (opcional)
-
-```bash
-# Redis local
-redis-server &
-# o con Docker
-docker compose up -d redis
-
-# Worker de colas
-php artisan queue:work
-```
 
 ---
 
-## 7️⃣ Tests en el cliente
+## 6️⃣ Tests en el cliente
 
 Ingresa a la carpeta generated-cliente y ejecuta
 ```bash
@@ -97,7 +84,6 @@ php artisan migrate --force
 php artisan config:cache route:cache view:cache
 ```
 
----
 
 ## ⚡ Optimización por defecto
 
